@@ -88,12 +88,12 @@ public class commonOperation {
 	public static ArrayList<Integer> XOR(ArrayList<Integer> arrayInput, ArrayList<Integer> constant){
 		/*To save the cipher text*/
 		ArrayList<Integer> cipher = new ArrayList<Integer>();
-
+//		System.out.println(arrayInput.size());
 		for (int i = 0 ; i < arrayInput.size() ; i ++){
 			/*Operation happens per Byte*/
 			BitSet bits = new BitSet(); 
-			bits = intToBitSet(arrayInput.get(i));
 			BitSet bitsConstant = new BitSet(); 
+			bits = intToBitSet(arrayInput.get(i));
 			bitsConstant = intToBitSet(constant.get(i));
 			
 			/*The real algorithm begins here*/
@@ -103,6 +103,18 @@ public class commonOperation {
 			cipher.add(bitSetToInt(bits));
 		}
 		return cipher;
+	}
+	
+
+	public static Integer XOR(Integer integer, Integer integer2) {
+		BitSet bits = new BitSet(); 
+		BitSet bitsConstant = new BitSet(); 
+		bits = intToBitSet(integer);
+		bitsConstant = intToBitSet(integer2);
+		
+		/*The real algorithm begins here*/
+		bits.xor(bitsConstant);
+		return bitSetToInt(bits);
 	}
 
 	public static String convertToString (ArrayList<Integer> array, int blockSize){
@@ -311,4 +323,5 @@ public class commonOperation {
 		}
 		return plainText;
 	}
+
 }

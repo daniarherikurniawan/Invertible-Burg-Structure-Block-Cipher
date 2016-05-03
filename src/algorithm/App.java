@@ -18,7 +18,7 @@ public class App {
 	
 	public static void main(String args[]) { 
 		/*Key should be per 8 characters length, min 8 and max 32*/
-		String key = new String("daniarherikurnia");
+		String key = new String("hanuarhf");
 
 //		runECB(key);
 		runCBC(key);
@@ -109,7 +109,7 @@ public class App {
 			cbc.cipherText = readFile(mainPath+"ChiperTextCBC.txt");
 			
 			/*Start the CFB mode*/
-			cbc.resultText = cbc.startDecryptionModeCBC(cbc.cipherText);
+//			cbc.resultText = cbc.startDecryptionModeCBC(cbc.cipherText);
 			
 			/*Write result text to ResultText.txt*/
 			writeFile(cbc.resultText, mainPath+"ResultTextCBC.txt");

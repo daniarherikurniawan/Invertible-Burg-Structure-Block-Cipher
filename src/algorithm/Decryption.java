@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Decryption {
 	final static int  blockSize = 16;/*Byte or 128 bit*/
 
-	public ArrayList<Integer> firstSubtitutionDec(ArrayList<Integer> key4Bytes, ArrayList<Integer> blockPlainText) {
+	public ArrayList<Integer> firstSubtitutionDec(ArrayList<Integer> key5Bytes, ArrayList<Integer> blockPlainText) {
 		// TODO Auto-generated method stub
 		return null;
 	}

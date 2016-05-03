@@ -18,7 +18,7 @@ public class modeCBC {
 	ArrayList<Integer> hashOfMainKey;
 	ArrayList<Integer> hashOfMsg;
 
-	final int  roundNumber = 5;
+	final int  roundNumber = 4;
 	
 	/*Key with minimum 8 Byte length or 8 characters*
 	 * 1 character = 8 bit = 1 Byte*/	
@@ -100,12 +100,13 @@ public class modeCBC {
 		
 		SubKey subKey = new SubKey(roundNumber);
 		subKey.generateSubKey(mainKey, plainText.toString());
+		subKey.print();
 		
 		for (int i = 0; i < roundNumber; i++) {
-			result = encrypt(subKey.arrayRoundKey.get(i), result);
+//			result = encrypt(subKey.arrayRoundKey.get(i), result);
 		}
 		
-		Map<Integer, Integer> frequency = commonOperation.countFrequency(result);
+//		Map<Integer, Integer> frequency = commonOperation.countFrequency(result);
 		return result;
 	}
 	
@@ -113,6 +114,7 @@ public class modeCBC {
 	/*Start the decryption mode CBC*/
 	public ArrayList<Integer> startDecryptionModeCBC(ArrayList<Integer> plainText){
 		ArrayList<Integer> result = (ArrayList<Integer>) plainText.clone();
+		
 		SubKey subKey = new SubKey(roundNumber);
 		subKey.generateSubKey(mainKey, plainText.toString());
 		
