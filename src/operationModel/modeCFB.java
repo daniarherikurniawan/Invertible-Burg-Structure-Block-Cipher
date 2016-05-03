@@ -1,3 +1,4 @@
+package operationModel;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -8,6 +9,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import algorithm.BurgAlgorithm;
+import commonOperation.commonOperation;
 
 public class modeCFB {
 	/*Initialization Vector*/
@@ -21,11 +25,11 @@ public class modeCFB {
 	String key;
 	
 	/*Plain text that will be encrypted */
-	ArrayList<Integer> plainText;
+	public ArrayList<Integer> plainText;
 	/*Chiper text that will be decrypted */
-	ArrayList<Integer> cipherText;
+	public ArrayList<Integer> cipherText;
 	/*Result text is the result of decrypted cipher text */
-	ArrayList<Integer> resultText;
+	public ArrayList<Integer> resultText;
 	
 	/*Constructor of modeCFB*/
 	public modeCFB(String key, ArrayList<Integer>  plainText){
@@ -72,7 +76,7 @@ public class modeCFB {
 			ArrayList<Integer> singleBlock = new ArrayList<Integer>();
 
 			/*one single block = 4 Bytes*/
-			singleBlock = newAlgorithm.blockE(key, constant);
+//			singleBlock = newAlgorithm.blockE(key, constant);
 			
 			/*CFB 8-bit -> this loop will encrypt per character*/
 			/*XOR singleblock with plaintext(8 bit)*/
@@ -100,7 +104,7 @@ public class modeCFB {
 			ArrayList<Integer> singleBlock = new ArrayList<Integer>();
 
 			/*one single block */
-			singleBlock = newAlgorithm.blockE(key, constant);
+//			singleBlock = newAlgorithm.blockE(key, constant);
 			
 			/*CFB 8-bit -> this loop will encrypt per character*/
 			/*XOR singleblock with plaintext(8 bit)*/

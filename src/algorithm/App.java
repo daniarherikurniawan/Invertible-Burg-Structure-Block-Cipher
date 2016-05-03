@@ -1,3 +1,4 @@
+package algorithm;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -5,6 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import operationModel.modeCBC;
+import operationModel.modeCFB;
+import operationModel.modeECB;
 
 public class App {
 	/*Path to open File*/
@@ -15,7 +20,7 @@ public class App {
 		/*Key should be per 8 characters length, min 8 and max 32*/
 		String key = new String("daniarherikurnia");
 
-		runECB(key);
+//		runECB(key);
 		runCBC(key);
 //		runCFB(key);
 		

@@ -1,7 +1,11 @@
+package operationModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import algorithm.BurgAlgorithm;
+import commonOperation.commonOperation;
 
 public class modeECB {
 	final int  blockSize = 16; /*Bytes*/
@@ -12,11 +16,11 @@ public class modeECB {
 	String key;
 	
 	/*Plain text that will be encrypted */
-	ArrayList<Integer> plainText;
+	public ArrayList<Integer> plainText;
 	/*Chiper text that will be decrypted */
-	ArrayList<Integer> cipherText;
+	public ArrayList<Integer> cipherText;
 	/*Result text is the result of decrypted cipher text */
-	ArrayList<Integer> resultText;
+	public ArrayList<Integer> resultText;
 	
 	/*Constructor of modeCFB*/
 	public modeECB(String key){
@@ -41,7 +45,7 @@ public class modeECB {
 				singleBlock.add(plainText.get(i+j));
 			}
 			
-			singleBlock = newAlgorithm.blockE(subKey, singleBlock);
+//			singleBlock = newAlgorithm.blockE(subKey, singleBlock);
 			/*shift left*/
 			result.addAll(singleBlock);	
 		}
@@ -60,7 +64,7 @@ public class modeECB {
 				singleBlock.add(cipherText.get(i+j));
 			}
 			
-			singleBlock = newAlgorithm.blockD(subKey, singleBlock);
+//			singleBlock = newAlgorithm.blockD(subKey, singleBlock);
 
 			result.addAll(singleBlock);			
 		}
@@ -71,9 +75,7 @@ public class modeECB {
 	
 	/*Start the encryption mode ECB*/
 	public ArrayList<Integer> startEncryptionModeECB(ArrayList<Integer> plainText){
-		System.out.println(plainText.toString());
-		plainText = adjustSizeOfPlaintext(plainText);
-		System.out.println(plainText.toString());
+		plainText = commonOperation.adjustSizeOfPlaintext(plainText, blockSize);
 		
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		result = (ArrayList<Integer>) plainText.clone();
@@ -85,8 +87,7 @@ public class modeECB {
 			System.out.println("success "+result.size());
 		}
 		
-		Map<Integer, Integer> frequency = new HashMap<Integer, Integer>();
-		frequency = commonOperation.countFrequency(result);
+		Map<Integer, Integer> frequency = commonOperation.countFrequency(result);
 		
 		return result;
 	}
@@ -106,33 +107,7 @@ public class modeECB {
 			result = decrypt(subKey, result);
 			System.out.println("success "+result.size());
 		}
-		result = removePadding(result);
+		result = commonOperation.removePadding(result, blockSize);
 		return result;
-	}
-	
-	public ArrayList<Integer> adjustSizeOfPlaintext(ArrayList<Integer> plainText){
-		/*The remaining byte + padding NUL*/
-		int numOfPad = blockSize - plainText.size()%blockSize;
-		if (numOfPad != blockSize){
-			for (int j = 0; j < numOfPad ; j++) {
-				plainText.add(0);
-			}
-		}
-		/*Should be times of 16 as the block's size is 16*/
-		return plainText;
-	}
-	
-	public ArrayList<Integer> removePadding(ArrayList<Integer> plainText){
-		/*remove Padding*/
-		boolean findEndOfPadding = false;
-		for (int j = plainText.size() - 1 ; j >= plainText.size() - blockSize -1 && !findEndOfPadding ; j--) {
-			if(!findEndOfPadding && plainText.get(j) == 0){
-				plainText.remove(j);
-			}else{
-				findEndOfPadding = true;
-			}
-		}
-		return plainText;
-	}
-	
+	}	
 }
