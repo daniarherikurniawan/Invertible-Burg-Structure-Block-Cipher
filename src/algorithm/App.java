@@ -18,14 +18,30 @@ public class App {
 	
 	public static void main(String args[]) { 
 		/*Key should be per 8 characters length, min 8 and max 32*/
-		String key = new String("hanuarhf");
+		String key = new String("hanubrhf");
+//		String key2 = new String("hbnubrhf");
 
 //		runECB(key);
 		runCBC(key);
+		runCBC2(key);
 //		runCFB(key);
-		
+		compareTwoFile("ChiperTextCBC.txt","ChiperTextCBC2.txt");
 	} 
 	
+	private static void compareTwoFile(String file1, String file2) {
+		ArrayList<Integer> data1 = readFile(mainPath+file1);
+		ArrayList<Integer> data2 = readFile(mainPath+file2);
+		int numbOfSameChar = 0;
+		for (int i = 0; i < data2.size(); i++) {
+//			System.out.println(i);
+			if(data1.get(i).compareTo(data2.get(i))== 0){
+				numbOfSameChar++;
+			}
+		}
+		System.out.println("Tingkat kesamaan kedua file :"
+		+numbOfSameChar/(data1.size()*1.0)*100+" %");
+	}
+
 	public static void runCFB(String key){
 		
 		/*Mode Encryption*/
@@ -86,7 +102,35 @@ public class App {
 			
 		System.out.println("ECB Success");
 	}
-	
+
+	public static void runCBC2(String key){
+		/*Create an instance of runCBC class*/
+		modeCBC cbc = new modeCBC(key);
+		
+		/*Mode Encryption*/
+			
+			/*Read plain text from PlainText.txt*/
+			cbc.plainText = readFile(mainPath+"PlainText2.txt");
+			
+			/*Start the CFB mode*/
+			cbc.cipherText = cbc.startEncryptionModeCBC(cbc.plainText);
+			
+			/*Write cipher text to ChiperText.txt*/
+//			writeFile(cbc.cipherText, mainPath+"ChiperTextCBC2.txt");
+		
+		/*Mode Decryption*/
+			
+			/*Read cipher text from ChiperText.txt*/
+			cbc.cipherText = readFile(mainPath+"ChiperTextCBC2.txt");
+			
+			/*Start the CFB mode*/
+			cbc.resultText = cbc.startDecryptionModeCBC(cbc.cipherText);
+			
+			/*Write result text to ResultText.txt*/
+			writeFile(cbc.resultText, mainPath+"ResultTextCBC2.txt");
+			
+		System.out.println("CBC2 Success");
+	}
 	
 	public static void runCBC(String key){
 		/*Create an instance of runCBC class*/
@@ -101,7 +145,7 @@ public class App {
 			cbc.cipherText = cbc.startEncryptionModeCBC(cbc.plainText);
 			
 			/*Write cipher text to ChiperText.txt*/
-			writeFile(cbc.cipherText, mainPath+"ChiperTextCBC.txt");
+//			writeFile(cbc.cipherText, mainPath+"ChiperTextCBC.txt");
 		
 		/*Mode Decryption*/
 			
@@ -109,7 +153,7 @@ public class App {
 			cbc.cipherText = readFile(mainPath+"ChiperTextCBC.txt");
 			
 			/*Start the CFB mode*/
-//			cbc.resultText = cbc.startDecryptionModeCBC(cbc.cipherText);
+			cbc.resultText = cbc.startDecryptionModeCBC(cbc.cipherText);
 			
 			/*Write result text to ResultText.txt*/
 			writeFile(cbc.resultText, mainPath+"ResultTextCBC.txt");

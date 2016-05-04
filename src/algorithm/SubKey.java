@@ -6,22 +6,22 @@ import java.util.Random;
 import commonOperation.commonOperation;
 
 public class SubKey {
-	private ArrayList<Integer> hashOfMsg;
+	private ArrayList<Integer> hashOfKey;
 	public ArrayList<RoundKey> arrayRoundKey;
 	private int roundNumber;
 	
 	public SubKey(int roundNumber){
 		this.roundNumber = roundNumber;
-		hashOfMsg = new ArrayList<Integer>();
+		hashOfKey = new ArrayList<Integer>();
 		arrayRoundKey = new ArrayList<>();
 	}
 	
-	public void generateSubKey(ArrayList<Integer> mainKey, String msg){
+	public void generateSubKey(ArrayList<Integer> mainKey){
 		int firstSeed = getFirstSeed(mainKey);
 		int secondSeed = getSecondSeed(mainKey);
 		
-		hashOfMsg = commonOperation.getHash(msg);
-		hashOfMsg = shuffleArrayList(firstSeed, secondSeed, hashOfMsg);
+		hashOfKey = commonOperation.getHash(mainKey.toString());
+		hashOfKey = shuffleArrayList(firstSeed, secondSeed, hashOfKey);
 		
 		for (int i = 0; i < roundNumber; i++) {
 			RoundKey roundKey = new RoundKey();		
@@ -32,7 +32,7 @@ public class SubKey {
 
 	private ArrayList<Integer> getBlockHash(int i) {
 		int firstIdx = i*8;
-		return new ArrayList<Integer>(hashOfMsg.subList(firstIdx, firstIdx+8 ));
+		return new ArrayList<Integer>(hashOfKey.subList(firstIdx, firstIdx+8 ));
 	}
 
 	private ArrayList<Integer> shuffleArrayList(int firstSeed, int secondSeed, ArrayList<Integer> hashOfMsg2) {
@@ -59,10 +59,10 @@ public class SubKey {
 
 	public void print() {
 		System.out.println("GENERATED SUBKEY");
-		System.out.println("hashMsg : "+hashOfMsg.subList(0, 8).toString());
-		System.out.println("hashMsg : "+hashOfMsg.subList(8, 16).toString());
-		System.out.println("hashMsg : "+hashOfMsg.subList(16, 24).toString());
-		System.out.println("hashMsg : "+hashOfMsg.subList(24, 32).toString());
+		System.out.println("hashOfKey : "+hashOfKey.subList(0, 8).toString());
+		System.out.println("hashOfKey : "+hashOfKey.subList(8, 16).toString());
+		System.out.println("hashOfKey : "+hashOfKey.subList(16, 24).toString());
+		System.out.println("hashOfKey : "+hashOfKey.subList(24, 32).toString());
 		for (int i = 0; i < roundNumber; i++) {
 			System.out.println("round "+i);
 			System.out.println("	subKey4Byte : "+arrayRoundKey.get(i).key4Bytes.toString());

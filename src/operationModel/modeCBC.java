@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,17 +47,18 @@ public class modeCBC {
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		ArrayList<Integer> constant = hashOfMainKey;
 		/*Proceed per block*/
-		for (int i = 0 ; i < plainText.size()-blockSize ; i += blockSize){
+		for (int i = 0 ; i < plainText.size() ; i += blockSize){
 			/*one single block = 8 Bytes*/
-			ArrayList<Integer> arrayInput= new ArrayList<Integer>();
+			ArrayList<Integer> singleBlock= new ArrayList<Integer>();
 			for (int j = 0; j < blockSize; j++) {
-				arrayInput.add(plainText.get(i+j));
+				singleBlock.add(plainText.get(i+j));
 			}
+
 			/*XOR before doing encription*/
-			ArrayList<Integer> singleBlock = commonOperation.XOR( arrayInput, constant);
-	
+			singleBlock = commonOperation.XOR( singleBlock, constant);
 			/*Encription per block*/
-			singleBlock = BurgAlgorithm.blockE(roundKey, singleBlock);	
+			singleBlock = BurgAlgorithm.blockE(roundKey, singleBlock);
+
 			
 			/*Collect the result (cipher)*/
 			result.addAll(singleBlock);	
@@ -68,27 +70,33 @@ public class modeCBC {
 	}
 
 	public ArrayList<Integer> decrypt(RoundKey roundKey, ArrayList<Integer>  plainText){
-		ArrayList<Integer> result = new ArrayList<Integer>();		
-		ArrayList<Integer> constant = hashOfMainKey;
-		for (int i = 0 ; i < plainText.size()-blockSize ; i += blockSize){
-			ArrayList<Integer> singleBlock = new ArrayList<Integer>();			
-			ArrayList<Integer> arrayInput= new ArrayList<Integer>();
-			/*one single block = 4 Bytes*/
-			for (int j = 0; j < blockSize; j++) {
-				arrayInput.add(plainText.get(i+j));
-			}			
-			/*Decription per block*/
-			singleBlock = BurgAlgorithm.blockD(roundKey, arrayInput);	
 
+		ArrayList<Integer> result = new ArrayList<Integer>();		
+		ArrayList<Integer> constant = new ArrayList<Integer>();
+		for (int i = plainText.size() ; i >= blockSize ; i -= blockSize){	
+			ArrayList<Integer> currentBlock= new ArrayList<Integer>(plainText.subList(i-16, i));
+
+			ArrayList<Integer> prevBlock;
+			if(i == blockSize){
+				prevBlock= new ArrayList<>( hashOfMainKey.subList(0, blockSize));
+			}else{
+				prevBlock= new ArrayList<Integer>(plainText.subList(i-32, i-16));
+			}
+			/*one single block = 4 Bytes*/
+
+			/*clone is needed to prevent memory level modification*/
+			currentBlock =  BurgAlgorithm.blockD(roundKey, currentBlock);	
+			
+			constant = (ArrayList<Integer>) prevBlock.clone();
+			
 			/*XOR after doing encription*/
-			singleBlock = commonOperation.XOR( singleBlock, constant);
-			
-			/*Update the constant as CBC rules*/
-			constant = arrayInput;
-			
+			currentBlock = commonOperation.XOR( currentBlock, constant);
+
 			/*Save the result (cipher)*/
-			result.addAll(singleBlock);	
+			Collections.reverse(currentBlock);
+			result.addAll(currentBlock);	
 		}
+		Collections.reverse(result);
 		return result;
 	}
 	
@@ -97,15 +105,18 @@ public class modeCBC {
 	public ArrayList<Integer> startEncryptionModeCBC(ArrayList<Integer> plainText){
 		plainText = commonOperation.adjustSizeOfPlaintext(plainText, blockSize);
 		ArrayList<Integer> result = (ArrayList<Integer>) plainText.clone();
-		
-		SubKey subKey = new SubKey(roundNumber);
-		subKey.generateSubKey(mainKey, plainText.toString());
-		subKey.print();
-		
-		for (int i = 0; i < roundNumber; i++) {
-//			result = encrypt(subKey.arrayRoundKey.get(i), result);
+
+		/*algorithm started*/
+		for (int j = 0; j < 3; j++) {
+			SubKey subKey = new SubKey(roundNumber);
+			subKey.generateSubKey(mainKey);
+//			subKey.print();
+
+			for (int i = 0; i < roundNumber; i++) {
+				result = encrypt(subKey.arrayRoundKey.get(i), result);
+			}
+			Collections.reverse(result);
 		}
-		
 //		Map<Integer, Integer> frequency = commonOperation.countFrequency(result);
 		return result;
 	}
@@ -115,13 +126,18 @@ public class modeCBC {
 	public ArrayList<Integer> startDecryptionModeCBC(ArrayList<Integer> plainText){
 		ArrayList<Integer> result = (ArrayList<Integer>) plainText.clone();
 		
-		SubKey subKey = new SubKey(roundNumber);
-		subKey.generateSubKey(mainKey, plainText.toString());
-		
-		for (int i = 0; i < roundNumber; i++) {
-			result = decrypt(subKey.arrayRoundKey.get(i), result);
+		/*algorithm started*/
+		for (int j = 0; j < 3; j++) {
+
+			Collections.reverse(result);
+			SubKey subKey = new SubKey(roundNumber);
+			subKey.generateSubKey(mainKey);
+			
+			for (int i = 0; i < roundNumber; i++) {
+				result = decrypt(subKey.arrayRoundKey.get(roundNumber-i-1), result);
+			}
+			result = commonOperation.removePadding(result, blockSize);
 		}
-		result = commonOperation.removePadding(result, blockSize);
 		return result;
 	}
 	
