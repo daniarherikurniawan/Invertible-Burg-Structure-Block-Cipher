@@ -15,11 +15,11 @@ public class BurgAlgorithm {
 	/*To encrypt*/
 	public static ArrayList<Integer> blockE(RoundKey roundKey, ArrayList<Integer> blockPlainText){
 		Encryption encryption = new Encryption();
-		blockPlainText = encryption.firstTransformationEnc(blockPlainText);
-		blockPlainText = encryption.firstSubtitutionEnc(roundKey.key4Bytes, blockPlainText);
+//		blockPlainText = encryption.firstTransformationEnc(blockPlainText);
+//		blockPlainText = encryption.firstSubtitutionEnc(roundKey.key4Bytes, blockPlainText);
 		for (int i = 0; i < 5; i++) {
 			blockPlainText = encryption.chainingOperation( roundKey.key5Bytes2.get(i),blockPlainText);
-			blockPlainText = encryption.secondTransformationEnc(blockPlainText);
+//			blockPlainText = encryption.secondTransformationEnc(blockPlainText);
 		}
 		blockPlainText = encryption.secondSubtitutionEnc(roundKey.key5Bytes1, blockPlainText);
 		blockPlainText = encryption.sBoxEnc("daniar", blockPlainText);

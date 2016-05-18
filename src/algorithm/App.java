@@ -116,7 +116,7 @@ public class App {
 			cbc.cipherText = cbc.startEncryptionModeCBC(cbc.plainText);
 			
 			/*Write cipher text to ChiperText.txt*/
-//			writeFile(cbc.cipherText, mainPath+"ChiperTextCBC2.txt");
+			writeFile(cbc.cipherText, mainPath+"ChiperTextCBC2.txt");
 		
 		/*Mode Decryption*/
 			
@@ -145,7 +145,7 @@ public class App {
 			cbc.cipherText = cbc.startEncryptionModeCBC(cbc.plainText);
 			
 			/*Write cipher text to ChiperText.txt*/
-//			writeFile(cbc.cipherText, mainPath+"ChiperTextCBC.txt");
+			writeFile(cbc.cipherText, mainPath+"ChiperTextCBC.txt");
 		
 		/*Mode Decryption*/
 			
